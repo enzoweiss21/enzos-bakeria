@@ -41,9 +41,6 @@ public class AutoPlayer : MonoBehaviour {
     private Dictionary<MixingBowl, eItem> bowlPlan = new Dictionary<MixingBowl, eItem>();
     private MixingBowl      activeBowl;     // the bowl the current recipe is going into
 
-    // The walkable kitchen floor, in whole-tile cells (x from -10 to 9, y from -4 to -1)
-    const int MIN_X = -10, MAX_X = 9, MIN_Y = -4, MAX_Y = -1;
-
     void Awake() {
         string[] args = System.Environment.GetCommandLineArgs();
         for ( int i = 0; i < args.Length; i++ ) {
@@ -126,7 +123,7 @@ public class AutoPlayer : MonoBehaviour {
                 return new BakerInput();
             }
             currentTask = task.label;
-            path = FindPath( Cell( baker.transform.position ), task.target );
+            path = KitchenGrid.FindPath( KitchenGrid.Cell( baker.transform.position ), task.target );
         }
         return Execute();
     }
@@ -313,7 +310,7 @@ public class AutoPlayer : MonoBehaviour {
 
         // Walk the path one cell at a time
         if ( path.Count > 0 ) {
-            Vector2 goal = CellCenter( path[0] );
+            Vector2 goal = KitchenGrid.CellCenter( path[0] );
             Vector2 delta = goal - pos;
             if ( delta.magnitude < 0.08f ) {
                 path.RemoveAt( 0 );
@@ -322,14 +319,14 @@ public class AutoPlayer : MonoBehaviour {
                 return input;
             }
             if ( path.Count > 0 ) {
-                input.move = ( CellCenter( path[0] ) - pos ).normalized;
+                input.move = ( KitchenGrid.CellCenter( path[0] ) - pos ).normalized;
                 return input;
             }
         }
 
         // At the right cell: turn to face the target
-        Vector2Int here = Cell( pos );
-        Vector2Int there = Cell( task.target.Center );
+        Vector2Int here = KitchenGrid.Cell( pos );
+        Vector2Int there = KitchenGrid.Cell( task.target.Center );
         Vector2 face = new Vector2( Mathf.Clamp( there.x - here.x, -1, 1 ), Mathf.Clamp( there.y - here.y, -1, 1 ) );
         if ( baker.target != task.target ) {
             input.move = face * 0.2f;
@@ -353,66 +350,6 @@ public class AutoPlayer : MonoBehaviour {
         }
         return input;
     }
-
-    // ------------------------------------------------------------------ path finding on the kitchen grid
-
-    static Vector2Int Cell( Vector2 p ) {
-        return new Vector2Int( Mathf.FloorToInt( p.x ), Mathf.FloorToInt( p.y ) );
-    }
-
-    static Vector2 CellCenter( Vector2Int c ) {
-        return new Vector2( c.x + 0.5f, c.y + 0.5f );
-    }
-
-    static bool Walkable( Vector2Int c ) {
-        if ( c.x < MIN_X || c.x > MAX_X || c.y < MIN_Y || c.y > MAX_Y ) return false;
-        // The island counter in the middle of the kitchen, and the plants in the top corners
-        if ( c.y == -2 && c.x >= -2 && c.x <= 1 ) return false;
-        if ( c.y == -1 && ( c.x == MIN_X || c.x == MAX_X ) ) return false;
-        return true;
-    }
-
-    // Breadth-first search to any walkable cell next to the target's cell
-    List<Vector2Int> FindPath( Vector2Int start, Interactable target ) {
-        Vector2Int goalCell = Cell( target.Center );
-        HashSet<Vector2Int> goals = new HashSet<Vector2Int>();
-        foreach ( Vector2Int d in DIRS ) if ( Walkable( goalCell + d ) ) goals.Add( goalCell + d );
-        if ( !Walkable( start ) ) start = NearestWalkable( start );
-
-        Dictionary<Vector2Int, Vector2Int> cameFrom = new Dictionary<Vector2Int, Vector2Int>();
-        Queue<Vector2Int> open = new Queue<Vector2Int>();
-        open.Enqueue( start );
-        cameFrom[start] = start;
-        while ( open.Count > 0 ) {
-            Vector2Int c = open.Dequeue();
-            if ( goals.Contains( c ) ) {
-                List<Vector2Int> result = new List<Vector2Int>();
-                while ( c != start ) {
-                    result.Insert( 0, c );
-                    c = cameFrom[c];
-                }
-                result.Insert( 0, start );
-                return result;
-            }
-            foreach ( Vector2Int d in DIRS ) {
-                Vector2Int n = c + d;
-                if ( Walkable( n ) && !cameFrom.ContainsKey( n ) ) {
-                    cameFrom[n] = c;
-                    open.Enqueue( n );
-                }
-            }
-        }
-        return new List<Vector2Int>();
-    }
-
-    static Vector2Int NearestWalkable( Vector2Int c ) {
-        c.x = Mathf.Clamp( c.x, MIN_X, MAX_X );
-        c.y = Mathf.Clamp( c.y, MIN_Y, MAX_Y );
-        if ( !Walkable( c ) ) c.y = -1;
-        return c;
-    }
-
-    static readonly Vector2Int[] DIRS = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
 
     // ------------------------------------------------------------------ helpers
 

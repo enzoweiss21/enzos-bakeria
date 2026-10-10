@@ -68,6 +68,8 @@ Assets/Scripts
   FX/FX.cs, WorldBar.cs, BakeryAmbience.cs   floating text, puffs, hearts, bars, sky color by time of day
   FX/CameraFit.cs            keeps the whole bakery on screen at any window shape
   Debug/AutoPlayer.cs        a bot that plays the game by itself (used for testing and balancing)
+  Debug/InputTester.cs       presses the real keys and mouse buttons and checks that each one works
+  Debug/KitchenGrid.cs       path finding on the kitchen floor, shared by the two test tools
 Assets/Editor
   BakeryBuilder.cs           builds the scene, prefabs, fonts and UI
   BakeryAssetImporter.cs     pixel-art import settings for everything in Assets/Art
@@ -85,3 +87,6 @@ Tools
 ```
 
 Each day's results are written to the player log.
+
+`InputTester` checks the real controls instead: launched with `-keytest`, it presses keys on a virtual keyboard and clicks
+a virtual mouse (menus, WASD and arrows, Space/E at every station, pause, restart, shop keys) and logs PASS/FAIL for each step.

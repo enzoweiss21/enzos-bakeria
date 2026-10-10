@@ -13,6 +13,9 @@ public class GameManager : MonoBehaviour {
 
     public const float BASE_MIX_SECONDS = 1.5f;
 
+    // The test tools turn this off so the game keeps running in a background window
+    static public bool PAUSE_ON_FOCUS_LOSS = true;
+
     [Header( "Inscribed: Days" )]
     public DaySettings[]    days;
     [Tooltip( "Real seconds from opening (8 AM) to closing (4 PM)" )]
@@ -122,7 +125,7 @@ public class GameManager : MonoBehaviour {
 
     // Tabbing away from the game pauses it so nobody burns while you're gone
     void OnApplicationFocus( bool hasFocus ) {
-        if ( !hasFocus && state == eGameState.playing && !AutoPlayer.ACTIVE ) Pause();
+        if ( !hasFocus && state == eGameState.playing && PAUSE_ON_FOCUS_LOSS && !AutoPlayer.ACTIVE ) Pause();
     }
 
     void Announcements() {

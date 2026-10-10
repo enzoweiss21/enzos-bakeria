@@ -667,6 +667,7 @@ static public class BakeryBuilder {
         amb.skyByDay = SkyGradient();
 
         go.AddComponent<AutoPlayer>();
+        go.AddComponent<InputTester>();
     }
 
     static ItemDef Def( eItem item, string name, eItemKind kind, string sprite, int price = 0, eItem bakesInto = eItem.none, float bake = 0 ) {
