@@ -243,7 +243,7 @@ static public class BakeryBuilder {
             bubble.itemIcons[i].transform.localScale = Vector3.one * 1.0f;
             bubble.checkMarks[i] = MakeSprite( "Check", bubble.itemIcons[i].transform, new Vector3( 0.18f, -0.14f, -0.01f ), "FX/check", 3, "WorldUI" );
         }
-        bubble.badge = MakeSprite( "Badge", bubbleGO.transform, new Vector3( -0.62f, 0.32f, -0.01f ), null, 3, "WorldUI" );
+        bubble.badge = MakeSprite( "Badge", bubbleGO.transform, new Vector3( -0.82f, 0.42f, -0.01f ), null, 3, "WorldUI" );
         bubble.patienceBar = MakeBar( "Patience", bubbleGO.transform, new Vector3( 0, 0.62f, 0 ), 0.8f, 0.1f, 1 );
         c.bubble = bubble;
         c.criticBadge = Spr( "FX/star" );
@@ -274,6 +274,7 @@ static public class BakeryBuilder {
         cam.transparencySortAxis = Vector3.up;
         go.transform.position = new Vector3( 0, 0.375f, -10 );
         go.AddComponent<AudioListener>();
+        go.AddComponent<CameraFit>();
     }
 
     static void BuildRoom( Transform world, out SpriteRenderer[] skies ) {
@@ -915,7 +916,7 @@ static public class BakeryBuilder {
         float x = 70;
         for ( int i = 0; i < inputs.Length; i++ ) {
             if ( i > 0 ) {
-                Text( "Plus", parent, "+", 44, INK, TextAlignmentOptions.Center, new Vector2( x - 35, y ), new Vector2( 40, 60 ) );
+                Text( "Plus", parent, "+", 44, INK, TextAlignmentOptions.Center, new Vector2( x - 55, y ), new Vector2( 40, 60 ) );
             }
             Img( "In", parent, inputs[i], Color.white, new Vector2( x, y ), new Vector2( 76, 76 ) );
             x += 110;
@@ -983,9 +984,9 @@ static public class BakeryBuilder {
         card.upgrade = id;
         card.background = bg;
         Transform t = bg.transform;
-        card.icon = Img( "Icon", t, null, Color.white, new Vector2( -175, 30 ), new Vector2( 112, 112 ) );
+        card.icon = Img( "Icon", t, null, Color.white, new Vector2( -170, 15 ), new Vector2( 96, 96 ) );
         card.icon.preserveAspect = true;
-        card.keyText = Text( "Key", t, "1", 32, new Color( 0.7f, 0.25f, 0.2f ), TextAlignmentOptions.Center, new Vector2( -195, 85 ), new Vector2( 40, 40 ) );
+        card.keyText = Text( "Key", t, "1", 32, new Color( 0.7f, 0.25f, 0.2f ), TextAlignmentOptions.Center, new Vector2( -205, 92 ), new Vector2( 40, 40 ) );
         card.nameText = Text( "Name", t, "Upgrade", 36, INK, TextAlignmentOptions.Left, new Vector2( 60, 75 ), new Vector2( 320, 50 ) );
         card.descriptionText = Text( "Description", t, "", 26, INK, TextAlignmentOptions.TopLeft, new Vector2( 60, 0 ), new Vector2( 320, 90 ), wrap: true );
         card.buyButton = Button( "Buy", t, "Buy $50", new Vector2( 60, -85 ), new Vector2( 260, 66 ), out card.buyLabel );
@@ -998,7 +999,7 @@ static public class BakeryBuilder {
         Transform t = panel.transform;
         Text( "Title", t, "You did it!", 90, INK, TextAlignmentOptions.Center, new Vector2( 0, 270 ), new Vector2( 1000, 120 ), font: fontTitle );
         for ( int i = 0; i < 3; i++ ) Img( "Star", t, "FX/star", new Color( 1f, 0.82f, 0.2f ), new Vector2( ( i - 1 ) * 120, 165 ), new Vector2( 90, 90 ) );
-        m.victoryBody = Text( "Body", t, "", 36, INK, TextAlignmentOptions.Top, new Vector2( 0, -20 ), new Vector2( 1000, 300 ), wrap: true );
+        m.victoryBody = Text( "Body", t, "", 36, INK, TextAlignmentOptions.Top, new Vector2( 0, -65 ), new Vector2( 1000, 300 ), wrap: true );
         m.victoryPlayAgainButton = Button( "Again", t, "[Space] Play again", new Vector2( -170, -290 ), new Vector2( 460, 84 ), out _ );
         m.victoryMenuButton = Button( "Menu", t, "Main menu", new Vector2( 250, -290 ), new Vector2( 300, 84 ), out _ );
     }

@@ -139,7 +139,7 @@ public class Customer : MonoBehaviour {
         SFX.PLAY( eSfx.takeOrder, 0.8f );
         SFX.BABBLE( voicePitch, 3 + order.Count, 0.2f );
         string greeting = ( type == eCustomerType.critic ) ? "Impress me." : ( type == eCustomerType.grandma ? "No rush, dear" : "Hi!" );
-        FX.TEXT( greeting, transform.position + Vector3.up * 2.2f, Color.white, 0.75f, 0.4f );
+        FX.TEXT( greeting, transform.position + Vector3.up * 2.65f, Color.white, 0.75f, 0.4f );
         GameManager.S.stats.ordersTaken++;
     }
 
@@ -179,13 +179,13 @@ public class Customer : MonoBehaviour {
             PayAndLeave();
         } else {
             SFX.BABBLE( voicePitch, 2, 0.6f );
-            FX.TEXT( "And the other one?", transform.position + Vector3.up * 2.2f, Color.white, 0.7f, 0.4f );
+            FX.TEXT( "And the other one?", transform.position + Vector3.up * 2.65f, Color.white, 0.7f, 0.4f );
         }
     }
 
     void Reject( string complaint, float patienceCost ) {
         patience -= patienceMax * patienceCost;
-        FX.TEXT( complaint, transform.position + Vector3.up * 2.2f, new Color( 1f, 0.6f, 0.5f ), 0.8f, 0.4f );
+        FX.TEXT( complaint, transform.position + Vector3.up * 2.65f, new Color( 1f, 0.6f, 0.5f ), 0.8f, 0.4f );
         SFX.PLAY( eSfx.error, 0.7f );
         SFX.BABBLE( voicePitch * 0.85f, 3, -0.6f );
         FX.POP( bodyVisual, 0.2f );
@@ -226,13 +226,13 @@ public class Customer : MonoBehaviour {
     void Grumble() {
         warned = true;
         string line = ( type == eCustomerType.grandma ) ? "Is it ready, dear?" : ( type == eCustomerType.critic ? "I'm waiting..." : "Hurry up!" );
-        FX.TEXT( line, transform.position + Vector3.up * 2.2f, new Color( 1f, 0.75f, 0.4f ), 0.75f, 0.4f );
+        FX.TEXT( line, transform.position + Vector3.up * 2.65f, new Color( 1f, 0.75f, 0.4f ), 0.75f, 0.4f );
         SFX.BABBLE( voicePitch * 0.9f, 3, -0.5f );
     }
 
     void StormOut() {
         GameManager.S.RecordLostCustomer( transform.position + Vector3.up * 1.6f );
-        FX.TEXT( type == eCustomerType.grandma ? "Well, I never!" : "Forget it!", transform.position + Vector3.up * 2.2f, new Color( 1f, 0.4f, 0.35f ), 0.9f );
+        FX.TEXT( type == eCustomerType.grandma ? "Well, I never!" : "Forget it!", transform.position + Vector3.up * 2.65f, new Color( 1f, 0.4f, 0.35f ), 0.9f );
         FX.PUFF( transform.position + Vector3.up * 1.6f, new Color( 1f, 0.5f, 0.4f, 0.8f ), 4 );
         SFX.PLAY( eSfx.angryLeave );
         SFX.BABBLE( voicePitch * 0.8f, 4, -0.8f );

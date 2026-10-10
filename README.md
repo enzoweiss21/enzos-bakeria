@@ -66,6 +66,7 @@ Assets/Scripts
   Audio/SFX.cs               every sound effect goes through here (variants, pitch jitter, gameplay-driven loops)
   Audio/MusicDirector.cs     adaptive music synthesized live, layered by how busy the bakery is
   FX/FX.cs, WorldBar.cs, BakeryAmbience.cs   floating text, puffs, hearts, bars, sky color by time of day
+  FX/CameraFit.cs            keeps the whole bakery on screen at any window shape
   Debug/AutoPlayer.cs        a bot that plays the game by itself (used for testing and balancing)
 Assets/Editor
   BakeryBuilder.cs           builds the scene, prefabs, fonts and UI
