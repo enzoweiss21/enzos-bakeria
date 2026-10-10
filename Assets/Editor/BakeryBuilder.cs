@@ -45,7 +45,12 @@ static public class BakeryBuilder {
         // Build automatically the first time the project is opened in the editor
         EditorApplication.delayCall += () => {
             if ( Application.isBatchMode || EditorApplication.isPlayingOrWillChangePlaymode ) return;
-            if ( !File.Exists( SCENE_PATH ) ) Build();
+            if ( !File.Exists( SCENE_PATH ) ) {
+                Build();
+            } else if ( string.IsNullOrEmpty( EditorSceneManager.GetActiveScene().path ) && !EditorSceneManager.GetActiveScene().isDirty ) {
+                // Freshly cloned project: open the game's scene instead of an empty "Untitled" one
+                EditorSceneManager.OpenScene( SCENE_PATH );
+            }
         };
     }
 

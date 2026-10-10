@@ -31,8 +31,9 @@ listed under "Scope" was built. These are the things that changed along the way,
    Now: WASD (or arrow keys) to move. Space picks up, puts down AND serves food. E takes
    orders and pets the cat, and HOLDING E is how you mix dough and frost cupcakes.
    At the counter, Space and E both work, so players never press the "wrong" key there.
-   Esc pauses. Why: with the original split, E and Space would often have done the same
-   thing at a station. Now the rule is simple: Space = "move an item", E = "do something".
+   Esc pauses and M turns the music on/off. Why: with the original split, E and Space
+   would often have done the same thing at a station. Now the rule is simple:
+   Space = "move an item", E = "do something".
    A highlight around the targeted station and a prompt at the bottom of the screen
    ("[Space] Take flour") show what will happen.
 
