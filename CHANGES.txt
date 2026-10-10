@@ -51,8 +51,8 @@ listed under "Scope" was built. These are the things that changed along the way,
 
 5. TAKING ORDERS (inspired by Papa's Bakeria)
    Customers arrive with a "!" and you have to greet them (E) to see what they want.
-   Their patience drains faster until you do. This adds one more thing to juggle when
-   several customers come in at once, which was the challenge the one-pager wanted.
+   This adds one more thing to juggle when several customers come in at once, which was
+   the challenge the one-pager wanted.
 
 6. BAKING HAS TIMING NOW
    One-pager: "a simple baking system."

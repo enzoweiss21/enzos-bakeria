@@ -88,9 +88,7 @@ public class Customer : MonoBehaviour {
         case eCustomerState.waitingToOrder:
         case eCustomerState.waitingForFood:
             if ( playing ) {
-                // Being ignored at the counter is extra annoying, so patience drains faster before you greet them
-                float drain = ( state == eCustomerState.waitingToOrder ) ? 1.4f : 1f;
-                patience -= Time.deltaTime * drain;
+                patience -= Time.deltaTime;
                 if ( !warned && PatienceFrac < 0.3f ) Grumble();
                 if ( patience <= 0 ) StormOut();
             }

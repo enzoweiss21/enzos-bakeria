@@ -12,10 +12,10 @@ public class CustomerSpawner : MonoBehaviour {
     public Transform        door;           // where customers appear
     [Tooltip( "y of the walkway between the door and the counter" )]
     public float            walkwayY = 2.1f;
-    public float            regularPatience = 50f;
-    public float            hurriedPatience = 32f;
-    public float            grandmaPatience = 70f;
-    public float            criticPatience = 45f;
+    public float            regularPatience = 90f;
+    public float            hurriedPatience = 60f;
+    public float            grandmaPatience = 120f;
+    public float            criticPatience = 90f;
 
     [Header( "Dynamic" )]
     public List<Customer>   customers = new List<Customer>();
