@@ -1,0 +1,110 @@
+ENZO'S BAKERY - CHANGES FROM THE DESIGN DOCUMENT (ONE-PAGER)
+==========================================================
+
+The core of the one-pager is all here: a 2D pixel-art bakery in one room, one baker,
+three baked goods, customers who order and wait with patience bars, ingredients ->
+prepare -> bake -> serve, money, and a workday that gets busier as it goes. Everything
+listed under "Scope" was built. These are the things that changed along the way, and why.
+
+
+1. ONE WORKDAY BECAME THREE (still one bakery)
+   One-pager: "One full workday" with a money goal.
+   Now: a short campaign of three days. Every day happens in the same bakery (no new
+   levels or environments, as planned), but each day adds something new:
+     Day 1  Bread and Cookies only, with tutorial hints.            Goal $75
+     Day 2  Cupcakes (and the frosting step), customers in a hurry. Goal $120
+     Day 3  Two-item orders, and a food critic at lunchtime.         Goal $180
+   Why: with one day, the game was over as soon as it got interesting. Three days give
+   a difficulty curve, and the upgrades (below) needed a "between days" to be bought in.
+   If you miss a day's goal you retry that day.
+
+2. THE UPGRADES MADE IT IN
+   One-pager: "If I finish everything else early, I might add a couple upgrades like
+   making the oven faster or making customers more patient."
+   Now: an upgrade shop between days with six upgrades, paid for with the money you
+   earned: Turbo Ovens (faster oven), Comfy Chairs (more patient customers), Third
+   Oven, Quick Whisk (mix and frost faster), Running Shoes, and Tip Jar.
+
+3. CONTROLS (same keys, slightly different jobs)
+   One-pager: WASD to move, E to interact with stations and customers, Space to pick up
+   and put down.
+   Now: WASD (or arrow keys) to move. Space picks up, puts down AND serves food. E takes
+   orders and pets the cat, and HOLDING E is how you mix dough and frost cupcakes.
+   At the counter, Space and E both work, so players never press the "wrong" key there.
+   Esc pauses. Why: with the original split, E and Space would often have done the same
+   thing at a station. Now the rule is simple: Space = "move an item", E = "do something".
+   A highlight around the targeted station and a prompt at the bottom of the screen
+   ("[Space] Take flour") show what will happen.
+
+4. THE "PREPARATION STATION" IS NOW MIXING BOWLS, PLUS A FROSTING STATION
+   One-pager: ingredient station -> preparation station -> oven -> customer, with simple
+   recipes.
+   Now: recipes stayed simple, as planned. Everything is flour plus at most one topping:
+     flour             -> bread dough
+     flour + chocolate -> cookie dough
+     flour + berries   -> cupcake batter (bake it, then frost it)
+   There are three ingredient crates, two mixing bowls, two ovens (a third can be
+   bought), a frosting station, a trash can, and plain counters plus an island for
+   setting things down. Cupcakes got the extra frosting step so that the third item
+   actually plays differently from the other two.
+
+5. TAKING ORDERS (inspired by Papa's Bakeria)
+   Customers arrive with a "!" and you have to greet them (E) to see what they want.
+   Their patience drains faster until you do. This adds one more thing to juggle when
+   several customers come in at once, which was the challenge the one-pager wanted.
+
+6. BAKING HAS TIMING NOW
+   One-pager: "a simple baking system."
+   Now: when the oven dings there's a short golden PERFECT window. Take the food out
+   right then for a bonus tip. Leave it too long and the oven starts beeping, then the
+   food burns and has to go in the trash. Dough taken out early keeps its progress.
+   Why: waiting for an oven was dead time. The timing gives you something to watch for.
+
+7. HOW MONEY WORKS
+   One-pager: "Every order you finish gives you money."
+   Now: each item has a price (bread $10, cookies $6, cupcake $12). On top of that the
+   customer tips based on how much patience they had left, +$2 for each perfect bake,
+   and serving 3+ happy customers in a row builds a streak bonus. Each day ends with a
+   results screen (served, lost, perfect bakes, tips, best streak, 1-3 stars).
+
+8. DIFFERENT CUSTOMERS
+   One-pager: "Different customers" (art) and "different customer orders."
+   Now: every customer is randomly assembled from body, shirt, pants, hair, beard and
+   hat sprites, so they all look different. Each has their own voice pitch for their
+   little babble. There are also customer types: regulars, people in a hurry (very
+   impatient, big tips), grandmas and grandpas (patient, small tips), and the food
+   critic on Day 3 (only perfect bakes impress them, but then they pay triple).
+
+9. NEW: BISCUIT THE BAKERY CAT
+   Not in the one-pager. A cat wanders around the kitchen. Pet her (E) and every
+   waiting customer gets some patience back. Then she naps for a while, so you have to
+   save her for the right moment.
+
+10. MUSIC IS TIED TO THE GAMEPLAY
+   One-pager: "some simple background music playing while the game is running."
+   Now: instead of a looping track, the music is generated live in code and follows the
+   bakery. It starts as just a bass line in the quiet morning. A piano joins when a
+   customer walks in, a shaker at 2+ waiting customers, and the melody during the lunch
+   rush. The tempo speeds up with every waiting customer, and a ticking clock comes in
+   when someone is about to storm out or something is about to burn. It's calm in the
+   menus and quieter while paused. The cafe chatter in the background also gets louder
+   the more customers are inside.
+
+11. SOUND
+   Everything the one-pager listed is in: oven (door, crackling, ding, warning beeps,
+   burning), preparation (flour, mixing/whisking, frosting), customer sounds (door bell,
+   voices, happy and angry), cash register, order completed, and sounds for mistakes
+   and lost customers. Added: footsteps, the cat, a tip jar, jingles for the start and
+   end of the day, and menu clicks.
+
+12. A WORKDAY'S LENGTH AND RUSH HOUR
+   The clock runs from 8 AM to 4 PM in 2.5 real minutes. It's slow in the morning, a
+   lunch rush hits at 11:30, "last call" is at 3:30 (no new customers), and the day
+   ends once the last customer has been served or has left.
+
+13. SMALL THINGS
+   - Day 1 has tutorial hints that follow what you're actually doing.
+   - The sky in the windows changes from sunrise to sunset as the day goes on.
+   - The character art only faces forward, so walking is animated with a hop and a
+     lean instead of walk-cycle frames.
+   - The game pauses itself if the window loses focus, so nothing burns while you're away.
