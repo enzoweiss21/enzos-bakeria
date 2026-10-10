@@ -37,6 +37,7 @@ public class Customer : MonoBehaviour {
     private float           walkCycle;
     private float           fade = 1;
     private bool            angry;
+    private bool            warned;     // already said "Hurry up!"
 
     public bool  IsAtCounter     { get { return state == eCustomerState.waitingToOrder || state == eCustomerState.waitingForFood; } }
     public float PatienceFrac    { get { return Mathf.Clamp01( patience / patienceMax ); } }
@@ -90,6 +91,7 @@ public class Customer : MonoBehaviour {
                 // Being ignored at the counter is extra annoying, so patience drains faster before you greet them
                 float drain = ( state == eCustomerState.waitingToOrder ) ? 1.4f : 1f;
                 patience -= Time.deltaTime * drain;
+                if ( !warned && PatienceFrac < 0.3f ) Grumble();
                 if ( patience <= 0 ) StormOut();
             }
             bubble.SetPatience( PatienceFrac, PatienceFrac < 0.25f );
@@ -99,6 +101,7 @@ public class Customer : MonoBehaviour {
             if ( playing || GameManager.S.state == eGameState.dayResults ) {
                 if ( WalkAlongPath() ) {
                     // Fade out through the door
+                    if ( fade >= 1 ) SFX.PLAY( eSfx.doorClose, 0.25f );
                     fade -= Time.deltaTime * 4f;
                     look.SetAlpha( fade );
                     if ( fade <= 0 ) Destroy( gameObject );
@@ -120,6 +123,8 @@ public class Customer : MonoBehaviour {
 
     void ArriveAtCounter() {
         state = eCustomerState.waitingToOrder;
+        fade = 1;
+        look.SetAlpha( 1 );
         bubble.ShowAlert();
         SFX.PLAY( eSfx.customerArrive, 0.7f );
         SFX.BABBLE( voicePitch, 2, 0.5f );
@@ -202,6 +207,7 @@ public class Customer : MonoBehaviour {
                 price *= 3;
                 FX.TEXT( "Five stars!", above + Vector3.up * 0.4f, new Color( 1f, 0.85f, 0.2f ), 1.1f );
                 FX.STARS( above, 6 );
+                SFX.PLAY( eSfx.sparkle );
                 GameManager.S.stats.criticReview = 5;
             } else {
                 tip = 0;
@@ -214,6 +220,14 @@ public class Customer : MonoBehaviour {
         SFX.BABBLE( voicePitch, 3, 1f );
         FX.HEARTS( transform.position + Vector3.up * 1.3f, frac > 0.5f ? 3 : 1 );
         Leave( false );
+    }
+
+    // An audible warning that this customer is about to give up
+    void Grumble() {
+        warned = true;
+        string line = ( type == eCustomerType.grandma ) ? "Is it ready, dear?" : ( type == eCustomerType.critic ? "I'm waiting..." : "Hurry up!" );
+        FX.TEXT( line, transform.position + Vector3.up * 2.2f, new Color( 1f, 0.75f, 0.4f ), 0.75f, 0.4f );
+        SFX.BABBLE( voicePitch * 0.9f, 3, -0.5f );
     }
 
     void StormOut() {

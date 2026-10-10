@@ -3,7 +3,7 @@ using UnityEngine;
 
 public enum eSfx {
     pickUp, putDown, error, sparkle, confirm,
-    voiceBlip, customerArrive, takeOrder, angryLeave, happy,
+    voiceBlip, customerArrive, takeOrder, angryLeave,
     grabFlour, grabSoft, bowlAdd, bowlDone, frosting, trash,
     ovenDoor, ovenDing, perfectDing, warningBeep, burnt,
     cashRegister, tipJar, coins,

@@ -79,11 +79,11 @@ public class HUD : MonoBehaviour {
     }
 
     static public void LOST_POP() {
-        if ( S != null ) S.StartCoroutine( S.FlashLost() );
+        if ( S != null && S.isActiveAndEnabled ) S.StartCoroutine( S.FlashLost() );
     }
 
     static public void BANNER( string text, Color color ) {
-        if ( S == null ) return;
+        if ( S == null || !S.isActiveAndEnabled ) return;   // coroutines can't run while the HUD is hidden
         if ( S.bannerRoutine != null ) S.StopCoroutine( S.bannerRoutine );
         S.bannerRoutine = S.StartCoroutine( S.ShowBanner( text, color ) );
     }

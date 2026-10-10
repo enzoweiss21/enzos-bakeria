@@ -37,6 +37,7 @@ public class AutoPlayer : MonoBehaviour {
     private bool            visitedHowTo;
     private bool            pausedOnce;
     private float           timeScale = 1;
+    private int             startDay = 1;   // -startDay 3 jumps straight to day 3 (with the upgrades a player would have)
     private Dictionary<MixingBowl, eItem> bowlPlan = new Dictionary<MixingBowl, eItem>();
     private MixingBowl      activeBowl;     // the bowl the current recipe is going into
 
@@ -50,6 +51,7 @@ public class AutoPlayer : MonoBehaviour {
             if ( args[i] == "-shots" && i + 1 < args.Length ) shotFolder = args[i + 1];
             if ( args[i] == "-shotEvery" && i + 1 < args.Length ) float.TryParse( args[i + 1], out shotEvery );
             if ( args[i] == "-timeScale" && i + 1 < args.Length ) float.TryParse( args[i + 1], out timeScale );
+            if ( args[i] == "-startDay" && i + 1 < args.Length ) int.TryParse( args[i + 1], out startDay );
         }
         if ( !ACTIVE ) {
             enabled = false;
@@ -89,6 +91,7 @@ public class AutoPlayer : MonoBehaviour {
             case eGameState.title:
                 // Visit the How to Play screen once, so it gets a screenshot too
                 if ( !visitedHowTo ) { visitedHowTo = true; gm.ShowHowToPlay(); }
+                else if ( startDay > 1 ) JumpToDay( gm );
                 else gm.StartNewGame();
                 break;
             case eGameState.howToPlay:  gm.GoToTitle(); break;
@@ -192,11 +195,21 @@ public class AutoPlayer : MonoBehaviour {
             }
         }
 
-        // Start something new that somebody is waiting for
+        // Someone about to storm out? A pet from Biscuit buys some time
+        BakeryCat cat = GameManager.S.cat;
+        if ( cat != null && !cat.IsNapping && CustomerSpawner.S.LowestPatience < 0.3f &&
+             Vector2.Distance( baker.transform.position, cat.transform.position ) < 6f ) {
+            return Do( cat, eAction.use, "pet the cat" );
+        }
+
+        // Start something new that somebody is waiting for (or, when it's quiet, bake a loaf for stock)
         eItem needed = NextNeeded();
+        if ( needed == eItem.none && GameManager.S.DoorsOpen && StockCount() < 2 ) needed = eItem.bread;
         if ( needed != eItem.none ) {
+            // Prep the next dough while the ovens are busy, but only one dough at a time waits in a bowl
             MixingBowl bowl = Find<MixingBowl>( b => b.IsEmpty && !b.HasIngredients );
-            if ( bowl != null && Find<Oven>( o => o.IsEmpty && !o.locked ) != null ) {
+            bool doughWaiting = Find<MixingBowl>( b => !b.IsEmpty ) != null;
+            if ( bowl != null && !doughWaiting ) {
                 bowlPlan[bowl] = needed;
                 activeBowl = bowl;
                 return Do( Find<IngredientCrate>( c => c.ingredient == eItem.flour ), eAction.grab, "get flour for " + needed );
@@ -225,6 +238,16 @@ public class AutoPlayer : MonoBehaviour {
         }
         foreach ( KeyValuePair<eItem, int> kv in need ) if ( kv.Value > 0 ) return kv.Key;
         return eItem.none;
+    }
+
+    // Doughs and baked goods anywhere in the kitchen (in bowls, ovens, on counters)
+    static int StockCount() {
+        int n = 0;
+        foreach ( Interactable it in Interactable.ALL ) {
+            Station st = it as Station;
+            if ( st != null && st.item != null && !st.item.IsIngredient ) n++;
+        }
+        return n;
     }
 
     static void Reduce( Dictionary<eItem, int> need, eItem product ) {
@@ -427,6 +450,19 @@ public class AutoPlayer : MonoBehaviour {
             }
         }
         gm.menus.Show( eGameState.shop );     // refresh the cards
+    }
+
+    // Skip ahead for testing later days, with the upgrades a player would probably own by then
+    void JumpToDay( GameManager gm ) {
+        gm.StartNewGame();
+        gm.savings = 1000;
+        gm.BuyUpgrade( eUpgrade.thirdOven );
+        gm.BuyUpgrade( eUpgrade.quickWhisk );
+        if ( startDay > 2 ) gm.BuyUpgrade( eUpgrade.turboOven );
+        gm.savings = 0;
+        gm.dayIndex = startDay - 2;
+        gm.NextDay();
+        startDay = 1;
     }
 
     void LogDay( GameManager gm ) {

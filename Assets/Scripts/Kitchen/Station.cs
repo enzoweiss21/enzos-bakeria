@@ -4,7 +4,6 @@ using UnityEngine;
 // Subclasses decide what they accept and what happens to the item while it's there.
 public class Station : Interactable {
     [Header( "Inscribed: Station" )]
-    public string       stationName = "Counter";
     public Transform    itemAnchor;         // where a held item sits on top of the furniture
     public Transform    visual;             // the sprite that "pops" when something lands on it
 

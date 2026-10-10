@@ -16,6 +16,7 @@ it before they storm out. Make enough money by closing time to pass each of the 
 | **E** | take a customer's order, pet Biscuit the cat |
 | **hold E** | mix dough in a bowl, frost a cupcake |
 | **Esc** | pause |
+| **M** | music on/off |
 
 Recipes (always flour plus at most one topping):
 

@@ -12,8 +12,8 @@ listed under "Scope" was built. These are the things that changed along the way,
    Now: a short campaign of three days. Every day happens in the same bakery (no new
    levels or environments, as planned), but each day adds something new:
      Day 1  Bread and Cookies only, with tutorial hints.            Goal $75
-     Day 2  Cupcakes (and the frosting step), customers in a hurry. Goal $120
-     Day 3  Two-item orders, and a food critic at lunchtime.         Goal $180
+     Day 2  Cupcakes (and the frosting step), customers in a hurry. Goal $105
+     Day 3  Two-item orders, and a food critic at lunchtime.         Goal $160
    Why: with one day, the game was over as soon as it got interesting. Three days give
    a difficulty curve, and the upgrades (below) needed a "between days" to be bought in.
    If you miss a day's goal you retry that day.

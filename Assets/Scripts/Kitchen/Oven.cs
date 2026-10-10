@@ -91,6 +91,11 @@ public class Oven : Station {
         case eOvenState.baking:
             item.bakeProgress += Time.deltaTime * GameManager.S.OvenSpeed;
             SFX.HOLD_LOOP( eLoop.ovenFire, 0.6f );
+            // A little steam rising from the oven while it bakes
+            if ( Time.time >= nextSmoke ) {
+                FX.PUFF( Center + new Vector2( Random.Range( -0.2f, 0.2f ), 0.75f ), new Color( 1, 1, 1, 0.35f ), 1 );
+                nextSmoke = Time.time + 0.7f;
+            }
             if ( item.bakeProgress >= item.Def.bakeSeconds ) {
                 item.SetType( item.Def.bakesInto );
                 state = eOvenState.perfect;

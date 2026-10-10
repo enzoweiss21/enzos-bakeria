@@ -129,17 +129,17 @@ public class GameManager : MonoBehaviour {
         float h = Hour;
         if ( !rushAnnounced && h >= rushHour ) {
             rushAnnounced = true;
-            HUD.BANNER( "Lunch Rush!", new Color( 1f, 0.55f, 0.3f ) );
+            HUD.BANNER( "Lunch Rush!", new Color( 1f, 0.92f, 0.45f ) );
             SFX.PLAY( eSfx.jingleRush, 0.6f );
         }
         if ( !lastCallAnnounced && h >= lastCallHour ) {
             lastCallAnnounced = true;
-            HUD.BANNER( "Last call! No new customers", new Color( 0.75f, 0.6f, 1f ) );
+            HUD.BANNER( "Last call! No new customers", Color.white );
             SFX.PLAY( eSfx.shopBell, 0.6f, 0.8f );
         }
         if ( !closingAnnounced && h >= closeHour && spawner.InShop > 0 ) {
             closingAnnounced = true;
-            HUD.BANNER( "Closing time! Finish the last orders", new Color( 0.6f, 0.75f, 1f ) );
+            HUD.BANNER( "Closing time! Finish the last orders", Color.white );
         }
     }
 

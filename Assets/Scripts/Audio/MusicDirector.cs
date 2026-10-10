@@ -1,4 +1,7 @@
 using UnityEngine;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 
 // Adaptive background music, synthesized live and driven by what's happening in the bakery.
 // It's a little jazzy loop in F major (Fmaj7 - Dm7 - Gm7 - C7) built from layers:
@@ -16,13 +19,14 @@ using UnityEngine;
 public class MusicDirector : MonoBehaviour {
     [Header( "Inscribed" )]
     [Range( 0, 1 )]
-    public float    volume = 0.5f;
+    public float    volume = 0.35f;     // kept low so the sound effects always come through
     public float    menuBpm = 84f;
     public float    workBpm = 92f;
     [Range( 0, 0.3f )]
     public float    swing = 0.12f;      // longer on-beats, shorter off-beats: a lazy, bouncy feel
 
     [Header( "Dynamic (read only)" )]
+    public bool     muted;              // M toggles the music
     public float    keysLayer;
     public float    shakerLayer;
     public float    melodyLayer;
@@ -96,6 +100,12 @@ public class MusicDirector : MonoBehaviour {
     void Update() {
         GameManager gm = GameManager.S;
         if ( gm == null ) return;
+#if ENABLE_INPUT_SYSTEM
+        if ( Keyboard.current != null && Keyboard.current.mKey.wasPressedThisFrame ) {
+            muted = !muted;
+            HUD.BANNER( muted ? "Music off (M)" : "Music on (M)", Color.white );
+        }
+#endif
 
         float master = 0.7f, keys = 1, shaker = 0, melody = 0, tension = 0, tempo = menuBpm;
         switch ( gm.state ) {
@@ -123,7 +133,7 @@ public class MusicDirector : MonoBehaviour {
         tgtMelody = melody;
         tgtTension = tension;
         tgtBpm = tempo;
-        src.volume = volume;
+        src.volume = muted ? 0 : volume;
 
         // Show the live values in the Inspector
         keysLayer = gKeys;

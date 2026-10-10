@@ -323,9 +323,11 @@ static public class BakeryBuilder {
         MakeSprite( "Plant", room, new Vector3( 9.5f, 1.2f, 0 ), "Decor/plant_b", 0 );
 
         // The service counter, with a till and a tip jar
-        SpriteRenderer counter = MakeTiled( "Service Counter", room, new Vector2( 0, COUNTER_Y + 0.5f ), new Vector2( 20, 1 ), "Furniture/service_counter", 0, "Default" );
+        // (furniture sprites have their pivot at the bottom, so this sits on y = COUNTER_Y)
+        SpriteRenderer counter = MakeTiled( "Service Counter", room, new Vector2( 0, COUNTER_Y ), new Vector2( 20, 1 ), "Furniture/service_counter", 0, "Default" );
         BoxCollider2D col = counter.gameObject.AddComponent<BoxCollider2D>();
         col.size = new Vector2( 20, 1 );
+        col.offset = new Vector2( 0, 0.5f );
         MakeSprite( "Coins", room, new Vector3( 8.6f, COUNTER_Y + 0.6f, 0 ), "Decor/coins", 1 );
         MakeSprite( "Counter Plant", room, new Vector3( -8.6f, COUNTER_Y + 0.55f, 0 ), "Decor/plant_b", 1 );
 
@@ -423,8 +425,7 @@ static public class BakeryBuilder {
         return go.AddComponent<T>();
     }
 
-    static void SetupStation( Station s, string displayName, float anchorY = 0.95f ) {
-        s.stationName = displayName;
+    static void SetupStation( Station s, float anchorY = 0.95f ) {
         s.visual = s.transform.Find( "Visual" );
         Transform anchor = Child( "Item Anchor", s.transform );
         anchor.localPosition = new Vector3( 0, anchorY, 0 );
@@ -433,7 +434,7 @@ static public class BakeryBuilder {
 
     static Counter MakeCounter( Transform parent, Vector3 pos, string sprite, string name ) {
         Counter c = MakeStation<Counter>( parent, pos, name, sprite );
-        SetupStation( c, "Counter" );
+        SetupStation( c );
         return c;
     }
 
@@ -462,7 +463,7 @@ static public class BakeryBuilder {
 
     static MixingBowl MakeBowl( Transform parent, Vector3 pos ) {
         MixingBowl bowl = MakeStation<MixingBowl>( parent, pos, "Mixing Bowl", "Furniture/counter" );
-        SetupStation( bowl, "Mixing Bowl", 1.0f );
+        SetupStation( bowl, 1.0f );
         SpriteRenderer b = MakeSprite( "Bowl", bowl.visual, new Vector3( 0, 0.55f, 0 ), "Furniture/bowl", 1 );
         b.transform.localScale = new Vector3( 1.9f, 1.9f, 1 );
         bowl.flourIcon = MakeSprite( "Flour In Bowl", bowl.transform, new Vector3( -0.2f, 1.25f, 0 ), "Food/flour", 3 );
@@ -475,7 +476,7 @@ static public class BakeryBuilder {
 
     static Oven MakeOven( Transform parent, Vector3 pos, bool isThird ) {
         Oven oven = MakeStation<Oven>( parent, pos, isThird ? "Oven 3" : "Oven", "Furniture/counter" );
-        SetupStation( oven, "Oven", 0.9f );
+        SetupStation( oven, 0.9f );
         oven.ovenRend = MakeSprite( "Oven", oven.visual, new Vector3( 0, 0.35f, 0 ), "Furniture/oven_off", 1 );
         oven.ovenRend.transform.localScale = new Vector3( 1.1f, 1.1f, 1 );
         oven.spriteOff = Spr( "Furniture/oven_off" );
@@ -493,7 +494,7 @@ static public class BakeryBuilder {
 
     static FrostingStation MakeFrosting( Transform parent, Vector3 pos ) {
         FrostingStation fs = MakeStation<FrostingStation>( parent, pos, "Frosting Station", "Furniture/counter_drawers" );
-        SetupStation( fs, "Frosting Station" );
+        SetupStation( fs );
         fs.itemAnchor.localPosition = new Vector3( 0.12f, 0.95f, 0 );
         MakeSprite( "Frosting Tub", fs.visual, new Vector3( -0.22f, 0.55f, 0 ), "Furniture/frosting_tub", 1 );
         fs.progressBar = MakeBar( "Frost Bar", fs.transform, new Vector3( 0, 1.65f, 0 ), 0.8f, 0.12f, 0 );
@@ -531,6 +532,7 @@ static public class BakeryBuilder {
         SpriteRenderer hat = MakeSprite( "Chef Hat", visual, new Vector3( 0, 0.44f, 0 ), "Characters/chef_hat", 1 );
         Transform hold = Child( "Hold Anchor", visual );
         hold.localPosition = new Vector3( 0, 0.42f, 0 );
+        hold.localScale = new Vector3( 0.8f, 0.8f, 1 );     // carried food is drawn a bit smaller than Enzo
         baker.visual = visual;
         baker.flipRenderers = new[] { body, hat };
         baker.holdAnchor = hold;
@@ -606,14 +608,14 @@ static public class BakeryBuilder {
                         "Take their order, mix the dough, bake it, and serve it before they lose their patience."
             },
             new DaySettings {
-                title = "Day 2", goal = 120, spawnInterval = 10.5f, doubleOrderChance = 0.1f, hurriedChance = 0.2f, grandmaChance = 0.15f,
+                title = "Day 2", goal = 105, spawnInterval = 11f, doubleOrderChance = 0.1f, hurriedChance = 0.15f, grandmaChance = 0.15f,
                 berriesUnlocked = true,
                 menu = new[] { eItem.bread, eItem.cookies, eItem.frostedCupcake },
                 intro = "New on the menu: Cupcakes! Flour + berries makes batter. Bake it, then frost it at the frosting station (hold E).\n\n" +
                         "Watch for customers in a hurry (marked with a clock): very little patience, but big tips."
             },
             new DaySettings {
-                title = "Day 3", goal = 180, spawnInterval = 9f, doubleOrderChance = 0.35f, hurriedChance = 0.25f, grandmaChance = 0.12f,
+                title = "Day 3", goal = 160, spawnInterval = 10f, doubleOrderChance = 0.3f, hurriedChance = 0.2f, grandmaChance = 0.12f,
                 berriesUnlocked = true, hasCritic = true,
                 menu = new[] { eItem.bread, eItem.cookies, eItem.frostedCupcake },
                 intro = "The big day. Lots of customers order two things at once, and a famous food critic (marked with a star) " +
@@ -696,7 +698,6 @@ static public class BakeryBuilder {
             Sfx( eSfx.customerArrive, 0.5f, "customer_order" ),
             Sfx( eSfx.takeOrder, 0.8f, "take_order" ),
             Sfx( eSfx.angryLeave, 0.7f, "angry_leave" ),
-            Sfx( eSfx.happy, 0.6f, "confirm" ),
             Sfx( eSfx.grabFlour, 0.8f, "grab_flour" ),
             Sfx( eSfx.grabSoft, 0.7f, "grab_soft" ),
             Sfx( eSfx.bowlAdd, 0.6f, "bowl_add" ),
@@ -890,13 +891,14 @@ static public class BakeryBuilder {
               "Space   pick up, put down, serve\n" +
               "E   take an order, pet Biscuit\n" +
               "Hold E   mix dough, frost cupcakes\n" +
-              "Esc   pause",
+              "Esc   pause      M   music on/off",
               32, INK, TextAlignmentOptions.TopLeft, new Vector2( -400, 110 ), new Vector2( 640, 280 ) );
 
         Text( "Recipes Title", t, "Recipes", 42, new Color( 0.7f, 0.25f, 0.2f ), TextAlignmentOptions.Left, new Vector2( 380, 280 ), new Vector2( 600, 50 ) );
         RecipeRow( t, 200, new[] { "Food/flour" }, "Food/bread", "Bread  $10" );
         RecipeRow( t, 100, new[] { "Food/flour", "Food/chocolate" }, "Food/cookies", "Cookies  $6" );
-        RecipeRow( t, 0, new[] { "Food/flour", "Food/berries" }, "Food/cupcake_frosted", "Cupcake  $12  (frost it!)" );
+        RecipeRow( t, 0, new[] { "Food/flour", "Food/berries" }, "Food/cupcake_frosted", "Cupcake  $12" );
+        Text( "Frost Note", t, "(bake it, then frost it)", 26, INK, TextAlignmentOptions.Left, new Vector2( 600, -45 ), new Vector2( 340, 40 ) );
 
         Text( "Tips", t,
               "1. Take the order at the counter.   2. Put ingredients in a bowl and hold E to mix.   3. Bake the dough.   4. Serve it!\n\n" +
@@ -908,19 +910,19 @@ static public class BakeryBuilder {
         m.howToBackButton = Button( "Back", t, "[Space] Back", new Vector2( 0, -390 ), new Vector2( 360, 76 ), out _ );
     }
 
+    // One line of the recipe card: ingredient icons, "=", the result, and its name and price
     static void RecipeRow( Transform parent, float y, string[] inputs, string output, string label ) {
-        float x = 120;
+        float x = 70;
         for ( int i = 0; i < inputs.Length; i++ ) {
             if ( i > 0 ) {
-                Text( "Plus", parent, "+", 44, INK, TextAlignmentOptions.Center, new Vector2( x - 10, y ), new Vector2( 40, 60 ) );
-                x += 30;
+                Text( "Plus", parent, "+", 44, INK, TextAlignmentOptions.Center, new Vector2( x - 35, y ), new Vector2( 40, 60 ) );
             }
-            Img( "In", parent, inputs[i], Color.white, new Vector2( x + 30, y ), new Vector2( 80, 80 ) );
-            x += 90;
+            Img( "In", parent, inputs[i], Color.white, new Vector2( x, y ), new Vector2( 76, 76 ) );
+            x += 110;
         }
-        Text( "Arrow", parent, "=", 44, INK, TextAlignmentOptions.Center, new Vector2( 370, y ), new Vector2( 40, 60 ) );
-        Img( "Out", parent, output, Color.white, new Vector2( 440, y ), new Vector2( 84, 84 ) );
-        Text( "Label", parent, label, 32, INK, TextAlignmentOptions.Left, new Vector2( 690, y ), new Vector2( 420, 60 ) );
+        Text( "Equals", parent, "=", 44, INK, TextAlignmentOptions.Center, new Vector2( 300, y ), new Vector2( 40, 60 ) );
+        Img( "Out", parent, output, Color.white, new Vector2( 375, y ), new Vector2( 80, 80 ) );
+        Text( "Label", parent, label, 30, INK, TextAlignmentOptions.Left, new Vector2( 600, y ), new Vector2( 340, 60 ) );
     }
 
     static void BuildDayIntro( Transform root, MenuScreens m ) {
@@ -1109,6 +1111,8 @@ static public class BakeryBuilder {
         go.transform.localPosition = localPos;
         SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
         if ( sprite != null ) sr.sprite = Spr( sprite );
+        // Sort by the pivot (an object's feet), so things lower on screen are drawn in front
+        sr.spriteSortPoint = SpriteSortPoint.Pivot;
         sr.sortingLayerName = layer;
         sr.sortingOrder = order;
         if ( color.HasValue ) sr.color = color.Value;
@@ -1117,7 +1121,6 @@ static public class BakeryBuilder {
 
     static SpriteRenderer MakeTiled( string name, Transform parent, Vector2 center, Vector2 size, string sprite, int order, string layer = "Background" ) {
         SpriteRenderer sr = MakeSprite( name, parent, center, sprite, order, layer );
-        // Furniture sprites have their pivot at the bottom; tiled ones are drawn around their center
         sr.drawMode = SpriteDrawMode.Tiled;
         sr.tileMode = SpriteTileMode.Continuous;
         sr.size = size;
